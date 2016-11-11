@@ -159,6 +159,7 @@
     _animate = YES;
     _centerEndLabels = YES;
     _horizontalMargin = nil;
+    _labelMargin = 0;
 
     [self layoutTrack];
 }
@@ -186,9 +187,10 @@
     if( count > 0) {
         CGFloat centerX = (self.bounds.size.width - ((count - 1) * self.ticksDistance))/2.0;
         const CGFloat centerY = self.bounds.size.height / 2.0;
+        CGRect labelFrame = CGRectMake(0, 0, self.ticksDistance - self.labelMargin, 300);
         int i = 0;
         for(NSString * name in self.names) {
-            UILabel * upLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+            UILabel * upLabel = [[UILabel alloc] initWithFrame:labelFrame];
             [self.upLabels addObject:upLabel];
             upLabel.text = name;
             upLabel.font = ((self.upFontName != nil)
@@ -197,17 +199,20 @@
             upLabel.textColor = ((self.upFontColor != nil)
                                  ? self.upFontColor
                                  : self.tintColor);
+            upLabel.numberOfLines = 0;
+            upLabel.textAlignment = NSTextAlignmentCenter;
             [upLabel sizeToFit];
             upLabel.center = CGPointMake(centerX, centerY);
             upLabel.frame = ({
                 CGRect frame = upLabel.frame;
-                // frame.origin.y = 0;
-                frame.origin.y = self.bounds.size.height - frame.size.height;
+                frame.origin.y = self.bounds.size.height - upLabel.font.lineHeight;
                 if(!self.centerEndLabels) {
                     if(i == 0) {
                         frame.origin.x = self.horizontalMargin;
+                        upLabel.textAlignment = NSTextAlignmentLeft;
                     } else if(i == count - 1) {
                         frame.origin.x = self.bounds.size.width - (upLabel.frame.size.width + self.horizontalMargin);
+                        upLabel.textAlignment = NSTextAlignmentRight;
                     }
                 }
                 frame;
@@ -215,7 +220,7 @@
             upLabel.alpha = 0.0;
             [self addSubview:upLabel];
 
-            UILabel * dnLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+            UILabel * dnLabel = [[UILabel alloc] initWithFrame:labelFrame];
             [self.dnLabels addObject:dnLabel];
             dnLabel.text = name;
             dnLabel.font = ((self.downFontName != nil)
@@ -224,16 +229,20 @@
             dnLabel.textColor = ((self.downFontColor != nil)
                                  ? self.downFontColor
                                  : [UIColor grayColor]);
+            dnLabel.numberOfLines = 0;
+            dnLabel.textAlignment = NSTextAlignmentCenter;
             [dnLabel sizeToFit];
             dnLabel.center = CGPointMake(centerX, centerY);
             dnLabel.frame = ({
                 CGRect frame = dnLabel.frame;
-                frame.origin.y = self.bounds.size.height - frame.size.height;
+                frame.origin.y = self.bounds.size.height - dnLabel.font.lineHeight;
                 if(!self.centerEndLabels) {
                     if(i == 0) {
                         frame.origin.x = self.horizontalMargin;
+                        dnLabel.textAlignment = NSTextAlignmentLeft;
                     } else if(i == count - 1) {
                         frame.origin.x = self.bounds.size.width - (dnLabel.frame.size.width + self.horizontalMargin);
+                        dnLabel.textAlignment = NSTextAlignmentRight;
                     }
                 }
                 frame;
