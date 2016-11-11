@@ -55,4 +55,6 @@
 // Margin to the left and right of the slider. Only relevant if centerEndLabel is false.
 @property (nonatomic, assign) NSInteger horizontalMargin;
 
+@property (nonatomic, assign) NSInteger labelMargin; // Horizontal margin for each label
+
 @end
